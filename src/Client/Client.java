@@ -38,15 +38,27 @@ public class Client extends UnicastRemoteObject implements Notifiable {
                System.out.print("Send: ");
                 msg = scan.nextLine();
                if(msg.equals("/help")) {
-                   System.out.println("/Help");
+
+                   chatServer.command(1);
+
                } else if(msg.equals("/nick")) {
-                   System.out.println("/nick");
+
+                   chatServer.command(2);
+
                } else if(msg.equals("/quit")) {
-                   System.out.println("/quit");
+
+                   chatServer.deRegister(c);
+                   System.out.println("Halting execution..");
+                   System.exit(0);
+
                } else if(msg.equals("/who")) {
-                   System.out.println("/who");
+
+                   chatServer.command(3);
+
                } else if(msg.charAt(0) == '/') {
+
                    System.out.println("Invalid command. Use /help to see available commands.");
+
                } else {
                    chatServer.broadcast(msg);
                }
