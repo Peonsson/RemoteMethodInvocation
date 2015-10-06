@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -40,10 +41,11 @@ public class Client extends UnicastRemoteObject implements Notifiable {
            Scanner scan = new Scanner(System.in);
            while(true) {
 
-               msg = scan.nextLine();
                Date currentTime = new Date();
                SimpleDateFormat ft = new SimpleDateFormat("hh:mm:ss");
+               msg = scan.nextLine();
                String time = "[" + ft.format(currentTime) + "]";
+
                if(msg.startsWith("/help")) {
 
                    System.out.println(time + chatServer.getHelp());
@@ -53,7 +55,7 @@ public class Client extends UnicastRemoteObject implements Notifiable {
                    String[] parts = msg.split(" ");
 
                    if(parts.length != 2) {
-                       System.out.println("/nick <username>");
+                       System.out.println(time + "[Server]: Invalid username. Use /nick <username>");
                        continue;
                    }
 
@@ -67,11 +69,11 @@ public class Client extends UnicastRemoteObject implements Notifiable {
 
                } else if(msg.startsWith("/who")) {
 
-                   System.out.println(chatServer.getOnlineClients());
+                   System.out.println(time + "[Server]: " + chatServer.getOnlineClients());
 
                } else if(msg.startsWith("/")) {
 
-                   System.out.println("No such command. Use /help to see available commands.");
+                   System.out.println(time + "[Server]: No such command. Use /help to see available commands.");
 
                } else {
                    try {
@@ -90,6 +92,8 @@ public class Client extends UnicastRemoteObject implements Notifiable {
            e.printStackTrace();
        } catch (NotBoundException e) {
            e.printStackTrace();
+       } catch (NoSuchElementException e) {
+
        }
     }
 
@@ -104,7 +108,7 @@ public class Client extends UnicastRemoteObject implements Notifiable {
     }
 
     @Override
-    public boolean checkAlive() throws RemoteException {
+    public boolean isAlive() throws RemoteException {
         return true;
     }
 }
