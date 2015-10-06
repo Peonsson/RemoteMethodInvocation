@@ -42,11 +42,13 @@ public class Client extends UnicastRemoteObject implements Notifiable {
            Scanner scan = new Scanner(System.in);
            while(true) {
 
-                msg = scan.nextLine();
-
+               msg = scan.nextLine();
+               Date currentTime = new Date();
+               SimpleDateFormat ft = new SimpleDateFormat("hh:mm:ss");
+               String time = "[" + ft.format(currentTime) + "]";
                if(msg.startsWith("/help")) {
 
-                   System.out.println(chatServer.getHelp());
+                   System.out.println(time + chatServer.getHelp());
 
                } else if(msg.startsWith("/nick")) {
 
@@ -57,7 +59,7 @@ public class Client extends UnicastRemoteObject implements Notifiable {
                        continue;
                    }
 
-                   System.out.println(chatServer.setNickname(c, parts[1]));
+                   System.out.println(time + chatServer.setNickname(c, parts[1]));
 
                } else if(msg.startsWith("/quit")) {
 
@@ -99,6 +101,7 @@ public class Client extends UnicastRemoteObject implements Notifiable {
         Date currentTime = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("hh:mm:ss");
         String time = "[" + ft.format(currentTime) + "]";
+
         System.out.println(time + msg);
     }
 
