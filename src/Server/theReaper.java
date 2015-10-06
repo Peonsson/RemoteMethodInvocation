@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class theReaper extends Thread {
 
     private ArrayList<ConnectedClient> clients;
-    private static final int SLEEP_TIMER = 3000;
+    private final int SLEEP_TIMER = 3000;
 
     public theReaper(ArrayList<ConnectedClient> clients) {
         this.clients = clients;
