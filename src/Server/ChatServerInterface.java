@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
  */
 public interface ChatServerInterface extends Remote {
    public void broadcast(String msg) throws RemoteException;
-   public void command(int command) throws RemoteException;
+   public void command(Notifiable client, int command) throws RemoteException;
    public void register(Notifiable c) throws RemoteException;
    public void deRegister(Notifiable c) throws RemoteException;
 }
