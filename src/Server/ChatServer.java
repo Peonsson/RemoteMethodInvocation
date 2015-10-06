@@ -24,13 +24,16 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 
    @Override
    public void broadcast() throws RemoteException {
-      // Callback to all clients
-
+      for (int i = 0; i < clients.size(); i++) {
+         clients.get(i).sendMessage("ChatServer says: test!");
+      }
    }
 
    @Override
-   public void register() throws RemoteException {
-
+   public void register(Notifiable c) throws RemoteException {
+      System.out.println("Hello darkness my old friend");
+      clients.add(c);
+      System.out.println("Hello darkness my old friend");
    }
 
    @Override
