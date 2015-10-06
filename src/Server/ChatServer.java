@@ -16,24 +16,22 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
    /**
     * Sole constructor.
     *
-    * @throws RemoteException
+    * @throws RemoteException®
     */
    public ChatServer() throws RemoteException {
       super();
    }
 
    @Override
-   public synchronized void broadcast(String msg) throws RemoteException {
-      for (int i = 0; i < clients.size(); i++) {
-         clients.get(i).sendMessage(msg);
+   synchronized public void broadcast(String msg) throws RemoteException {
+      for (Notifiable client : clients) {
+         client.sendMessage(msg);
       }
    }
 
    @Override
-   public void register(Notifiable c) throws RemoteException {
-      System.out.println("Hello darkness my old friend");
+   synchronized public void register(Notifiable c) throws RemoteException {
       clients.add(c);
-      System.out.println("Hello darkness my old friend");
    }
 
    @Override
