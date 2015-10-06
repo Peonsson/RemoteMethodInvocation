@@ -30,7 +30,7 @@ public class Client extends UnicastRemoteObject implements Notifiable {
        System.out.println("Client starting!");
 
        try {
-           String ip = "localhost";
+           String ip = "130.229.148.111";
            String url = "rmi://" + ip + "/chatserver";
            ChatServerInterface chatServer = (ChatServerInterface) Naming.lookup(url);
            Client c = new Client(chatServer);
@@ -97,7 +97,6 @@ public class Client extends UnicastRemoteObject implements Notifiable {
         Date currentTime = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("hh:mm:ss");
         String time = "[" + ft.format(currentTime) + "]";
-        String name = "[" + "Johan" + "]: ";
         System.out.println(time + msg);
     }
 }
