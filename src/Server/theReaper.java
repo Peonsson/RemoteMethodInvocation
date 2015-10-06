@@ -12,7 +12,8 @@ import java.util.ArrayList;
  */
 public class theReaper extends Thread {
 
-    ArrayList<ConnectedClient> clients;
+    private ArrayList<ConnectedClient> clients;
+    private static final int SLEEP_TIMER = 3000;
 
     public theReaper(ArrayList<ConnectedClient> clients) {
         this.clients = clients;
@@ -48,7 +49,7 @@ public class theReaper extends Thread {
             }
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(SLEEP_TIMER);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
