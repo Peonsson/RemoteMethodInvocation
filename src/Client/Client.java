@@ -17,6 +17,7 @@ import java.util.Scanner;
  * Assignment 2A
  * Created by Peonsson & roppe546 on 2015-09-26.
  */
+
 public class Client extends UnicastRemoteObject implements Notifiable {
 
     private ChatServerInterface chatServerInterface;

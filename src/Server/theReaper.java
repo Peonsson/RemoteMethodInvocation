@@ -33,7 +33,6 @@ public class theReaper extends Thread {
                         String disconnectedClientName = clients.get(i).getNickname(); //if someone is alive get their nickname;
                         clients.remove(i);//remove the dead user
                         i--;
-
                         for (ConnectedClient j : clients) {//for all clients
                             try {
 

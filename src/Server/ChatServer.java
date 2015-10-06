@@ -10,7 +10,7 @@ import java.util.List;
 import Client.Notifiable;
 
 /**
- * Created by robin on 2015-10-06.
+ * Created by Peonsson and roppe546 on 2015-10-06.
  */
 public class ChatServer extends UnicastRemoteObject implements ChatServerInterface {
 
