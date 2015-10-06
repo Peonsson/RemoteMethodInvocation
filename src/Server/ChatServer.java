@@ -39,7 +39,12 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
       }
 
       for (int i = 0; i < clients.size(); i++) {
-         clients.get(i).getCallbackObject().sendMessage(sendingClientNickname + ": " + msg);
+         try{
+            clients.get(i).getCallbackObject().sendMessage("["+sendingClientNickname+"]" + ": " + msg);
+         } catch(RemoteException e) {
+            clients.remove(i);
+            i--;
+         }
       }
    }
 
@@ -55,7 +60,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
             }
          }
          catch (ServerNotActiveException e) {
-            System.out.println("Could not find calling client in getHelp.");
+            System.err.println("Could not find calling client in getHelp.");
             e.printStackTrace();
          }
       }
@@ -75,13 +80,14 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
             }
          }
          catch (ServerNotActiveException e) {
-            System.out.println("Could not find calling client in setNickname.");
+            System.err.println("Could not find calling client in setNickname.");
             e.printStackTrace();
          }
       }
 
       // Set new nickname to client
       clients.get(index).setNickname(newNickname);
+      clients.get(index).getCallbackObject().sendMessage("[Server]: " + "Your new nickname is " + clients.get(index).getNickname() + ".");
    }
 
    @Override
