@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
  */
 public interface ChatServerInterface extends Remote {
    public void broadcast(String msg) throws RemoteException;
-   public void getHelp() throws RemoteException;
+   public String getHelp() throws RemoteException;
    public void setNickname(String newNickname) throws RemoteException;
    public void getOnlineClients() throws RemoteException;
    public void register(Notifiable c) throws RemoteException;
