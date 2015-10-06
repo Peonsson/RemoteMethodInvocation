@@ -30,10 +30,8 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
    }
 
    @Override
-   public void register(Notifiable c) throws RemoteException {
-      System.out.println("Hello darkness my old friend");
+   public synchronized void register(Notifiable c) throws RemoteException {
       clients.add(c);
-      System.out.println("Hello darkness my old friend");
    }
 
    @Override
