@@ -8,9 +8,11 @@ import Client.Notifiable;
 public class ConnectedClient {
    private String nickname;
    private Notifiable callbackObject;
+   private String ipAddress;
 
-   public ConnectedClient(String nickname, Notifiable callbackObject) {
+   public ConnectedClient(String nickname, String ipAddress, Notifiable callbackObject) {
       this.nickname = nickname;
+      this.ipAddress = ipAddress;
       this.callbackObject = callbackObject;
    }
 
@@ -24,5 +26,9 @@ public class ConnectedClient {
 
    public Notifiable getCallbackObject() {
       return callbackObject;
+   }
+
+   public String getIpAddress() {
+      return ipAddress;
    }
 }
