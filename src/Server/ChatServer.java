@@ -11,6 +11,7 @@ import java.util.ArrayList;
  */
 public class ChatServer extends UnicastRemoteObject implements ChatServerInterface {
    private ArrayList<ConnectedClient> clients = new ArrayList<>();
+   private int numOfConns = 1;
 
    /**
     * Sole constructor.
@@ -40,8 +41,11 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 
       for (int i = 0; i < clients.size(); i++) {
          try{
-            clients.get(i).getCallbackObject().sendMessage("["+sendingClientNickname+"]" + ": " + msg);
-         } catch(RemoteException e) {
+            if (!clients.get(i).getNickname().equals(sendingClientNickname)) {
+               clients.get(i).getCallbackObject().sendMessage("["+sendingClientNickname+"]" + ": " + msg);
+            }
+         }
+         catch(RemoteException e) {
             clients.remove(i);
             i--;
          }
@@ -49,7 +53,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
    }
 
    @Override
-   public void getHelp() throws RemoteException {
+   public String getHelp() throws RemoteException {
       Notifiable callingClient = null;
 
       for (int i = 0; i < clients.size(); i++) {
@@ -65,7 +69,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
          }
       }
 
-      callingClient.sendMessage("Commands:\n/help - this help text\n/nick - change your nickname\n/who - list all online clients\n/quit - quit the chat");
+      return "Commands:\n/help - this help text\n/nick - change your nickname\n/who - list all online clients\n/quit - quit the chat";
    }
 
    @Override
@@ -119,7 +123,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
    @Override
    synchronized public void register(Notifiable c) throws RemoteException {
       try {
-         clients.add(new ConnectedClient("anonymous", getClientHost(), c));
+         clients.add(new ConnectedClient("anonymous " + numOfConns++, getClientHost(), c));
       }
       catch (ServerNotActiveException e) {
          e.printStackTrace();
