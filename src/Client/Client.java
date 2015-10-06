@@ -44,7 +44,7 @@ public class Client extends UnicastRemoteObject implements Notifiable {
 
                if(msg.startsWith("/help")) {
 
-                   chatServer.getHelp();
+                   System.out.println(chatServer.getHelp());
 
                } else if(msg.startsWith("/nick")) {
 
@@ -55,17 +55,17 @@ public class Client extends UnicastRemoteObject implements Notifiable {
                        continue;
                    }
 
-                   chatServer.setNickname(parts[1]);
+                   System.out.println(chatServer.setNickname(c, parts[1]));
 
                } else if(msg.startsWith("/quit")) {
 
-                   chatServer.deRegister();
+                   chatServer.deRegister(c);
                    System.out.println("Halting execution..");
                    System.exit(0);
 
                } else if(msg.startsWith("/who")) {
 
-                   chatServer.getOnlineClients();
+                   System.out.println(chatServer.getOnlineClients());
 
                } else if(msg.startsWith("/")) {
 
@@ -73,7 +73,7 @@ public class Client extends UnicastRemoteObject implements Notifiable {
 
                } else {
                    try {
-                       chatServer.broadcast(msg);
+                       chatServer.broadcast(c, msg);
                    } catch(ConnectException e) {
                        System.err.println("Cannot connect to server!");
                        System.err.println("Halting execution..");
