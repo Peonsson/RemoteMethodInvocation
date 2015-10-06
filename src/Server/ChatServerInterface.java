@@ -1,5 +1,7 @@
 package Server;
 
+import Client.Notifiable;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -8,6 +10,6 @@ import java.rmi.RemoteException;
  */
 public interface ChatServerInterface extends Remote {
    public void broadcast() throws RemoteException;
-   public void register() throws RemoteException;
+   public void register(Notifiable c) throws RemoteException;
    public void deRegister() throws RemoteException;
 }

@@ -1,26 +1,28 @@
 package Server;
 
 import java.net.MalformedURLException;
+import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
 /**
  * Assignment 2A
  * Created by Peonsson & roppe546 on 2015-09-26.
  */
 public class Server {
+
    public static void main(String[] args) {
       try {
          ChatServer chatServer = new ChatServer();
          LocateRegistry.createRegistry(1099);
          Naming.rebind("chatserver", chatServer);
-         System.out.println("Server initialized.");
-      }
-      catch (MalformedURLException e) {
-         e.printStackTrace();
+         System.out.println("Server running...");
       }
       catch (RemoteException e) {
+         e.printStackTrace();
+      } catch (MalformedURLException e) {
          e.printStackTrace();
       }
    }
