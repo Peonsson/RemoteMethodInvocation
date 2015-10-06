@@ -84,12 +84,12 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
       }
 
       // Notify other clients of nickname change
-      broadcast(c, "I'm now known as " + newNickname);
+      broadcast(c, "I'm now known as " + newNickname + ".");
 
       // Set new nickname to client
       clients.get(index).setNickname(newNickname);
 
-      return "[Server]: Your new nickname is " + newNickname;
+      return "[Server]: Your new nickname is " + newNickname + ".";
    }
 
    @Override
