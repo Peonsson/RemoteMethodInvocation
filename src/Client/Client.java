@@ -7,6 +7,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Calendar;
 import java.util.Scanner;
 
 /**
@@ -39,11 +40,11 @@ public class Client extends UnicastRemoteObject implements Notifiable {
                 msg = scan.nextLine();
                if(msg.equals("/help")) {
 
-                   chatServer.command(1);
+                   chatServer.command(c, 1);
 
                } else if(msg.equals("/nick")) {
 
-                   chatServer.command(2);
+                   chatServer.command(c, 2);
 
                } else if(msg.equals("/quit")) {
 
@@ -53,7 +54,7 @@ public class Client extends UnicastRemoteObject implements Notifiable {
 
                } else if(msg.equals("/who")) {
 
-                   chatServer.command(3);
+                   chatServer.command(c, 3);
 
                } else if(msg.charAt(0) == '/') {
 
@@ -75,6 +76,9 @@ public class Client extends UnicastRemoteObject implements Notifiable {
 
     @Override
     public void sendMessage(String msg) throws RemoteException {
-        System.out.println("Received: " + msg);
+
+        Calendar c = Calendar.getInstance();
+        String time = "";
+        System.out.println(time + "Received: " + msg);
     }
 }
