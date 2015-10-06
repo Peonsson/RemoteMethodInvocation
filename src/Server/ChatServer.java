@@ -1,6 +1,7 @@
 package Server;
 
 import Client.Notifiable;
+import com.sun.tools.corba.se.idl.constExpr.Not;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -10,7 +11,6 @@ import java.util.ArrayList;
  * Created by robin on 2015-10-06.
  */
 public class ChatServer extends UnicastRemoteObject implements ChatServerInterface {
-
    private ArrayList<Notifiable> clients = new ArrayList<>();
 
    /**
@@ -35,7 +35,8 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
    }
 
    @Override
-   public void deRegister() throws RemoteException {
-
+   synchronized public void deRegister(Notifiable c) throws RemoteException {
+      int index = clients.indexOf(c);
+      clients.remove(index);
    }
 }

@@ -1,6 +1,7 @@
 package Server;
 
 import Client.Notifiable;
+import com.sun.tools.corba.se.idl.constExpr.Not;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -11,5 +12,5 @@ import java.rmi.RemoteException;
 public interface ChatServerInterface extends Remote {
    public void broadcast(String msg) throws RemoteException;
    public void register(Notifiable c) throws RemoteException;
-   public void deRegister() throws RemoteException;
+   public void deRegister(Notifiable c) throws RemoteException;
 }
