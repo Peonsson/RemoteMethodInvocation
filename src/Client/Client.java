@@ -3,6 +3,7 @@ package Client;
 import Server.ChatServerInterface;
 
 import java.net.MalformedURLException;
+import java.rmi.ConnectException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -20,6 +21,7 @@ public class Client extends UnicastRemoteObject implements Notifiable {
     private ChatServerInterface chatServerInterface;
 
     public Client(ChatServerInterface s) throws RemoteException {
+
         super();
         this.chatServerInterface = s;
     }
@@ -42,7 +44,7 @@ public class Client extends UnicastRemoteObject implements Notifiable {
 
                if(msg.startsWith("/help")) {
 
-                   chatServer.getHelp(c);
+                   chatServer.getHelp();
 
                } else if(msg.startsWith("/nick")) {
 
@@ -53,24 +55,30 @@ public class Client extends UnicastRemoteObject implements Notifiable {
                        continue;
                    }
 
-                   chatServer.setNickname(c, parts[1]);
+                   chatServer.setNickname(parts[1]);
 
                } else if(msg.startsWith("/quit")) {
 
-                   chatServer.deRegister(c);
+                   chatServer.deRegister();
                    System.out.println("Halting execution..");
                    System.exit(0);
 
                } else if(msg.startsWith("/who")) {
 
-                   chatServer.getOnlineClients(c);
+                   chatServer.getOnlineClients();
 
                } else if(msg.startsWith("/")) {
 
                    System.out.println("No such command. Use /help to see available commands.");
 
                } else {
-                   chatServer.broadcast(msg);
+                   try {
+                       chatServer.broadcast(msg);
+                   } catch(ConnectException e) {
+                       System.err.println("Cannot connect to server!");
+                       System.err.println("Halting execution..");
+                       System.exit(0);
+                   }
                }
            }
 
@@ -88,8 +96,8 @@ public class Client extends UnicastRemoteObject implements Notifiable {
 
         Date currentTime = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("hh:mm:ss");
-        String time = "["+ft.format(currentTime)+"]";
+        String time = "[" + ft.format(currentTime) + "]";
         String name = "[" + "Johan" + "]: ";
-        System.out.println(time + name + msg);
+        System.out.println(time + msg);
     }
 }
