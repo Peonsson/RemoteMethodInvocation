@@ -38,6 +38,11 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 
       for (int i = 0; i < clients.size(); i++) {
          try {
+            if (clients.get(i).getCallbackObject().equals(c)) {
+               // Skip the client itself
+               continue;
+            }
+
             clients.get(i).getCallbackObject().sendMessage("["+sendingClientNickname+"]" + ": " + msg);
          }
          // Remove client if not connectable
@@ -55,6 +60,13 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 
    @Override
    public synchronized String setNickname(Notifiable c, String newNickname) throws RemoteException {
+      // Check if nickname is already in use
+      for (int i = 0; i < clients.size(); i++) {
+         if (clients.get(i).getNickname().equals(newNickname)) {
+            return "Nickname already in use. Please choose another.";
+         }
+      }
+
       // Get index of calling client from client list
       int index = -1;
       for (int i = 0; i < clients.size(); i++) {
