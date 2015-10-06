@@ -2,6 +2,7 @@ package Server;
 
 import Client.Notifiable;
 import java.rmi.RemoteException;
+import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
@@ -24,6 +25,30 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
    synchronized public void broadcast(String msg) throws RemoteException {
       for (Notifiable client : clients) {
          client.sendMessage(msg);
+      }
+   }
+
+   @Override
+   synchronized public void command(int command) throws RemoteException {
+      try {
+         String caller = getClientHost();
+         System.out.println(caller);
+      }
+      catch (ServerNotActiveException e) {
+         e.printStackTrace();
+      }
+
+      // help
+      if (command == 1) {
+         
+      }
+      // nick
+      else if (command == 2) {
+
+      }
+      // who
+      else if (command == 3) {
+
       }
    }
 
