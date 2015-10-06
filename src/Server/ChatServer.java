@@ -30,7 +30,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 
       // Find nickname of sending client
       for (int i = 0; i < clients.size(); i++) {
-         if (clients.get(i).equals(c)) {
+         if (clients.get(i).getCallbackObject().equals(c)) {
             sendingClientNickname = clients.get(i).getNickname();
             break;
          }
