@@ -12,6 +12,15 @@ import java.util.ArrayList;
  * Created by robin on 2015-10-06.
  */
 public class ChatServer extends UnicastRemoteObject implements ChatServerInterface {
+
+//   private class deadChecker extends Thread {
+//      @Override
+//      public void run() {
+//         super.run();
+//
+//      }
+//   }
+
    private ArrayList<ConnectedClient> clients = new ArrayList<>();
    private int numOfConns = 1;
 
