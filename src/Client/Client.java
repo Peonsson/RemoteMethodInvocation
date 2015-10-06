@@ -30,7 +30,7 @@ public class Client extends UnicastRemoteObject implements Notifiable {
        System.out.println("Client starting!");
 
        try {
-           String ip = "130.229.148.111";
+           String ip = "localhost";
            String url = "rmi://" + ip + "/chatserver";
            ChatServerInterface chatServer = (ChatServerInterface) Naming.lookup(url);
            Client c = new Client(chatServer);
