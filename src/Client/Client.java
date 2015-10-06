@@ -8,7 +8,6 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -27,10 +26,10 @@ public class Client extends UnicastRemoteObject implements Notifiable {
 
     public static void main(String[] args) {
        System.out.println("Client starting!");
-        int i = 0;
 
        try {
-           String url = "rmi://localhost/chatserver";
+           String ip = "localhost";
+           String url = "rmi://" + ip + "/chatserver";
            ChatServerInterface chatServer = (ChatServerInterface) Naming.lookup(url);
            Client c = new Client(chatServer);
            chatServer.register(c);
@@ -38,12 +37,14 @@ public class Client extends UnicastRemoteObject implements Notifiable {
            String msg;
            Scanner scan = new Scanner(System.in);
            while(true) {
+
                 msg = scan.nextLine();
-               if(msg.equals("/help")) {
+
+               if(msg.startsWith("/help")) {
 
                    chatServer.getHelp(c);
 
-               } else if(msg.contains("/nick")) {
+               } else if(msg.startsWith("/nick")) {
 
                    String[] parts = msg.split(" ");
 
@@ -51,21 +52,22 @@ public class Client extends UnicastRemoteObject implements Notifiable {
                        System.out.println("/nick <username>");
                        continue;
                    }
+
                    chatServer.setNickname(c, parts[1]);
 
-               } else if(msg.equals("/quit")) {
+               } else if(msg.startsWith("/quit")) {
 
                    chatServer.deRegister(c);
                    System.out.println("Halting execution..");
                    System.exit(0);
 
-               } else if(msg.equals("/who")) {
+               } else if(msg.startsWith("/who")) {
 
                    chatServer.getOnlineClients(c);
 
-               } else if(msg.charAt(0) == '/') {
+               } else if(msg.startsWith("/")) {
 
-                   System.out.println("Invalid command. Use /help to see available commands.");
+                   System.out.println("No such command. Use /help to see available commands.");
 
                } else {
                    chatServer.broadcast(msg);
