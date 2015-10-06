@@ -1,6 +1,8 @@
 package Server;
 
 import Client.Notifiable;
+import com.sun.tools.corba.se.idl.constExpr.Not;
+
 import java.rmi.RemoteException;
 import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
@@ -23,28 +25,22 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
    }
 
    @Override
-   synchronized public void broadcast(String msg) throws RemoteException {
+   public synchronized void broadcast(Notifiable c, String msg) throws RemoteException {
       String sendingClientNickname = null;
 
+      // Find nickname of sending client
       for (int i = 0; i < clients.size(); i++) {
-         try {
-            if (clients.get(i).getIpAddress().equals(getClientHost())) {
-               sendingClientNickname = clients.get(i).getNickname();
-               break;
-            }
-         }
-         catch (ServerNotActiveException e) {
-            System.out.println("Could not find calling client in broadcast.");
-            e.printStackTrace();
+         if (clients.get(i).equals(c)) {
+            sendingClientNickname = clients.get(i).getNickname();
+            break;
          }
       }
 
       for (int i = 0; i < clients.size(); i++) {
-         try{
-            if (!clients.get(i).getNickname().equals(sendingClientNickname)) {
-               clients.get(i).getCallbackObject().sendMessage("["+sendingClientNickname+"]" + ": " + msg);
-            }
+         try {
+            clients.get(i).getCallbackObject().sendMessage("["+sendingClientNickname+"]" + ": " + msg);
          }
+         // Remove client if not connectable
          catch(RemoteException e) {
             clients.remove(i);
             i--;
@@ -54,97 +50,57 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
 
    @Override
    public String getHelp() throws RemoteException {
-      Notifiable callingClient = null;
-
-      for (int i = 0; i < clients.size(); i++) {
-         try {
-            if (clients.get(i).getIpAddress().equals(getClientHost())) {
-               callingClient = clients.get(i).getCallbackObject();
-               break;
-            }
-         }
-         catch (ServerNotActiveException e) {
-            System.err.println("Could not find calling client in getHelp.");
-            e.printStackTrace();
-         }
-      }
-
       return "Commands:\n/help - this help text\n/nick - change your nickname\n/who - list all online clients\n/quit - quit the chat";
    }
 
    @Override
-   synchronized public void setNickname(String newNickname) throws RemoteException {
+   public synchronized String setNickname(Notifiable c, String newNickname) throws RemoteException {
       // Get index of calling client from client list
       int index = -1;
       for (int i = 0; i < clients.size(); i++) {
-         try {
-            if (clients.get(i).getIpAddress().equals(getClientHost())) {
-               index = i;
-               break;
-            }
-         }
-         catch (ServerNotActiveException e) {
-            System.err.println("Could not find calling client in setNickname.");
-            e.printStackTrace();
+         if (clients.get(i).getCallbackObject().equals(c)) {
+            index = i;
+            break;
          }
       }
 
       // Set new nickname to client
       clients.get(index).setNickname(newNickname);
-      clients.get(index).getCallbackObject().sendMessage("[Server]: " + "Your new nickname is " + clients.get(index).getNickname() + ".");
+      return "[Server]: Your new nickname is " + newNickname;
    }
 
    @Override
-   synchronized public void getOnlineClients() throws RemoteException {
-      Notifiable callingClient = null;
-
-      for (int i = 0; i < clients.size(); i++) {
-         try {
-            if (clients.get(i).getIpAddress().equals(getClientHost())) {
-               callingClient = clients.get(i).getCallbackObject();
-               break;
-            }
-         }
-         catch (ServerNotActiveException e) {
-            System.out.println("Could not find calling client in getOnlineClients.");
-            e.printStackTrace();
-         }
-      }
-
+   synchronized public String getOnlineClients() throws RemoteException {
       // Build string with online clients.
       StringBuilder sb = new StringBuilder();
       for (ConnectedClient client : clients) {
          sb.append(client.getNickname() + "\n");
       }
 
-      callingClient.sendMessage(sb.toString());
+      return sb.toString();
    }
 
    @Override
-   synchronized public void register(Notifiable c) throws RemoteException {
+   public synchronized void register(Notifiable c) throws RemoteException {
       try {
          clients.add(new ConnectedClient("anonymous " + numOfConns++, getClientHost(), c));
       }
       catch (ServerNotActiveException e) {
+         System.out.println("Error registering new client.");
          e.printStackTrace();
       }
    }
 
    @Override
-   synchronized public void deRegister() throws RemoteException {
+   public synchronized void deRegister(Notifiable c) throws RemoteException {
       int index = -1;
 
       for (int i = 0; i < clients.size(); i++) {
-         try {
-            if (clients.get(i).getIpAddress().equals(getClientHost())) {
-               index = i;
-               break;
-            }
+         if (clients.get(i).getCallbackObject().equals(c)) {
+            index = i;
+            break;
          }
-         catch (ServerNotActiveException e) {
-            System.out.println("Could not find calling client in deRegister.");
-            e.printStackTrace();
-         }
+         System.out.println("Could not find calling client in deRegister.");
       }
 
       if (index == -1) {
