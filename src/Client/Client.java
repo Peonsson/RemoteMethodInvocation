@@ -101,4 +101,9 @@ public class Client extends UnicastRemoteObject implements Notifiable {
         String time = "[" + ft.format(currentTime) + "]";
         System.out.println(time + msg);
     }
+
+    @Override
+    public boolean checkAlive() throws RemoteException {
+        return true;
+    }
 }
