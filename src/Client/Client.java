@@ -55,7 +55,7 @@ public class Client extends UnicastRemoteObject implements Notifiable {
                        continue;
                    }
 
-                   chatServer.setNickname(c, parts[1]);
+                   System.out.println(chatServer.setNickname(c, parts[1]));
 
                } else if(msg.startsWith("/quit")) {
 
