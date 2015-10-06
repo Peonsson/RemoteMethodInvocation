@@ -29,18 +29,10 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
    }
 
    @Override
-   synchronized public void command(int command) throws RemoteException {
-      try {
-         String caller = getClientHost();
-         System.out.println(caller);
-      }
-      catch (ServerNotActiveException e) {
-         e.printStackTrace();
-      }
-
+   synchronized public void command(Notifiable client, int command) throws RemoteException {
       // help
       if (command == 1) {
-         
+
       }
       // nick
       else if (command == 2) {
