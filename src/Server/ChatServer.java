@@ -47,8 +47,12 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
          }
          // Remove client if not connectable
          catch(RemoteException e) {
+            String disconnectedClientName = clients.get(i).getNickname();
             clients.remove(i);
             i--;
+            for(ConnectedClient j: clients) {
+               j.getCallbackObject().sendMessage("[Server]: " + disconnectedClientName + " has left the chat.");
+            }
          }
       }
    }
@@ -100,6 +104,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
    public synchronized void register(Notifiable c) throws RemoteException {
       try {
          clients.add(new ConnectedClient("anonymous " + numOfConns++, getClientHost(), c));
+         c.sendMessage("[Server]: Welcome to Peonsson and roppe546's SimpleChatRMI!");
       }
       catch (ServerNotActiveException e) {
          System.out.println("Error registering new client.");
