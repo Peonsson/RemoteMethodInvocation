@@ -9,4 +9,5 @@ import java.rmi.RemoteException;
  */
 public interface Notifiable extends Remote {
    public void sendMessage(String msg) throws RemoteException;
+   public boolean checkAlive() throws RemoteException;
 }

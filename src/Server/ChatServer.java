@@ -13,15 +13,7 @@ import java.util.ArrayList;
  */
 public class ChatServer extends UnicastRemoteObject implements ChatServerInterface {
 
-//   private class deadChecker extends Thread {
-//      @Override
-//      public void run() {
-//         super.run();
-//
-//      }
-//   }
-
-   private ArrayList<ConnectedClient> clients = new ArrayList<>();
+   private ArrayList<ConnectedClient> clients;
    private int numOfConns = 1;
 
    /**
@@ -31,6 +23,8 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
     */
    public ChatServer() throws RemoteException {
       super();
+      clients  = new ArrayList<ConnectedClient>();
+      new theReaper(clients).start();
    }
 
    @Override
