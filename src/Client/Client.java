@@ -7,6 +7,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Scanner;
 
 /**
  * Assignment 2A
@@ -30,7 +31,27 @@ public class Client extends UnicastRemoteObject implements Notifiable {
            ChatServerInterface chatServer = (ChatServerInterface) Naming.lookup(url);
            Client c = new Client(chatServer);
            chatServer.register(c);
-           chatServer.broadcast("Hello World!");
+
+           String msg;
+           Scanner scan = new Scanner(System.in);
+           while(true) {
+               System.out.print("Send: ");
+                msg = scan.nextLine();
+               if(msg.equals("/help")) {
+                   System.out.println("/Help");
+               } else if(msg.equals("/nick")) {
+                   System.out.println("/nick");
+               } else if(msg.equals("/quit")) {
+                   System.out.println("/quit");
+               } else if(msg.equals("/who")) {
+                   System.out.println("/who");
+               } else if(msg.charAt(0) == '/') {
+                   System.out.println("Invalid command. Use /help to see available commands.");
+               } else {
+                   chatServer.broadcast(msg);
+               }
+           }
+
        } catch (RemoteException e) {
            e.printStackTrace();
        } catch (MalformedURLException e) {
@@ -42,6 +63,6 @@ public class Client extends UnicastRemoteObject implements Notifiable {
 
     @Override
     public void sendMessage(String msg) throws RemoteException {
-        System.out.println("received: " + msg);
+        System.out.println("Received: " + msg);
     }
 }
