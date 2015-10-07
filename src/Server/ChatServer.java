@@ -163,21 +163,22 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
    public synchronized void deRegister(Notifiable c) throws RemoteException {
       synchronized (clients) {
          int index = -1;
+         String disconnectingClientName = null;
 
          for (int i = 0; i < clients.size(); i++) {
             if (clients.get(i).getCallbackObject().equals(c)) {
+               disconnectingClientName = clients.get(i).getNickname();
                index = i;
                break;
             }
-            System.out.println("Could not find calling client in deRegister.");
-         }
-
-         if (index == -1) {
-            System.out.println("No such client.");
-            return;
          }
 
          clients.remove(index);
+
+         // Notify others that client left
+         for (ConnectedClient client : clients) {
+            client.getCallbackObject().sendMessage("[Server]: " + disconnectingClientName + " has left the chat.");
+         }
       }
    }
 }
