@@ -29,6 +29,13 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
       new theReaper(clients).start();
    }
 
+   /**
+    * Send a message to all registered clients.
+    * If some clients have disconnected during broadcast; remove them.
+    * @param c
+    * @param msg
+    * @throws RemoteException
+    */
    @Override
    public synchronized void broadcast(Notifiable c, String msg) throws RemoteException {
       synchronized (clients) {
@@ -69,6 +76,13 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
       return "Commands:\n/help - this help text\n/nick - change your nickname\n/who - list all online clients\n/quit - quit the chat";
    }
 
+   /**
+    * Sets a new nickname for given user.
+    * @param c
+    * @param newNickname
+    * @return
+    * @throws RemoteException
+    */
    @Override
    public synchronized String setNickname(Notifiable c, String newNickname) throws RemoteException {
       synchronized (clients) {
@@ -100,7 +114,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
    }
 
    /**
-    * Build string with online clients on a new line and return it.
+    * Build string with online clients, a new line seperating each client.
     * @return a String with all the online clients on seperate lines.
     * @throws RemoteException
     */
@@ -122,6 +136,11 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
       }
    }
 
+   /**
+    * Register new clients to the chat server.
+    * @param c
+    * @throws RemoteException
+    */
    @Override
    public synchronized void register(Notifiable c) throws RemoteException {
       synchronized (clients) {
@@ -135,6 +154,11 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
       }
    }
 
+   /**
+    * Remove clients from the server.
+    * @param c
+    * @throws RemoteException
+    */
    @Override
    public synchronized void deRegister(Notifiable c) throws RemoteException {
       synchronized (clients) {

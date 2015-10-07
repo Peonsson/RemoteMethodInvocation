@@ -17,6 +17,10 @@ public class theReaper extends Thread {
         this.clients = clients;
     }
 
+    /**
+     * Sends periodic isAlive? messages to each client.
+     * If they fail to respond; remove them.
+     */
     @Override
     public void run() {
         while(true) {

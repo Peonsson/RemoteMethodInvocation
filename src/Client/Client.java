@@ -22,6 +22,11 @@ public class Client extends UnicastRemoteObject implements Notifiable {
 
     private ChatServerInterface chatServerInterface;
 
+    /**
+     * Sole constructor.
+     * @param s
+     * @throws RemoteException
+     */
     public Client(ChatServerInterface s) throws RemoteException {
 
         super();
@@ -32,12 +37,19 @@ public class Client extends UnicastRemoteObject implements Notifiable {
        System.out.println("Client starting!");
 
        try {
+           /**
+            * Clients connect to the RMI service.
+            */
            String local = "localhost";
            String url = "rmi://" + local + "/chatserver";
            ChatServerInterface chatServer = (ChatServerInterface) Naming.lookup(url);
            Client c = new Client(chatServer);
            chatServer.register(c);
 
+           /**
+            * Clients sends calls methods as messages to the server.
+            * With simple error handling.
+            */
            String msg;
            Scanner scan = new Scanner(System.in);
            while(true) {
@@ -98,6 +110,11 @@ public class Client extends UnicastRemoteObject implements Notifiable {
        }
     }
 
+    /**
+     * Clients receive messages from the server.
+     * @param msg
+     * @throws RemoteException
+     */
     @Override
     public void sendMessage(String msg) throws RemoteException {
 
@@ -108,6 +125,11 @@ public class Client extends UnicastRemoteObject implements Notifiable {
         System.out.println(time + msg);
     }
 
+    /**
+     * Checks if the current client is alive.
+     * @return
+     * @throws RemoteException
+     */
     @Override
     public boolean isAlive() throws RemoteException {
         return true;
