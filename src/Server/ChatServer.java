@@ -75,7 +75,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
          // Check if nickname is already in use
          for (int i = 0; i < clients.size(); i++) {
             if (clients.get(i).getNickname().equals(newNickname)) {
-               return "Nickname already in use. Please choose another.";
+               return "[Server]: Nickname already in use. Please choose another.";
             }
          }
 
