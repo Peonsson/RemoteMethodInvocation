@@ -79,7 +79,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerInterfa
     */
    @Override
    public String getHelp() throws RemoteException {
-      return "Commands:\n/help - this help text\n/nick - change your nickname\n/who - list all online clients\n/quit - quit the chat";
+      return "[Server]: Commands:\n/help - this help text\n/nick - change your nickname\n/who - list all online clients\n/quit - quit the chat";
    }
 
    /**
